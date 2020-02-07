@@ -1,0 +1,54 @@
+.tags-page {
+  .ArticleItem {
+    margin-bottom: 20px;
+    .image-content {
+      // padding: 20px 0;
+      display: block;
+      height: 200px;
+      width: 100%;
+      background-color: #eee;
+    }
+    .item-image {
+      height: 100%;
+      width: 100%;
+    }
+    .text-content {
+      padding: 15px;
+      box-shadow: 0px 0px 20px #eee;
+      .title {
+        font-size: 42px;
+        text-align: left;
+      }
+      .info-base {
+        display: flex;
+        align-items: center;
+        .time,
+        .eye {
+          font-size: 25px;
+          margin-left: 5px;
+        }
+        .scan {
+          margin: 0 15px;
+        }
+      }
+      .info-tag {
+        padding-top: 10px;
+        padding-bottom: 15px;
+        .tag {
+          margin-right: 10px;
+        }
+      }
+      .intro {
+        font-size: 26px;
+        max-height: 180px;
+        line-height: 36px;
+        display: -webkit-box;
+        word-break: break-all;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+      }
+    }
+  }
+}
