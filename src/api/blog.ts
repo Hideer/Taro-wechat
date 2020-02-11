@@ -5,46 +5,24 @@ let articleAll = []
  * 更具时间对归档数据进行整理处理
  */
 function formatArticle(source) {
-  const map = {}
-  const dest = []
-  for (let i = 0; i < source.length; i++) {
-    const item = source[i]
-    const indexesOne = item.addTime.substr(0, 4)
-    if (!map[indexesOne]) {
-      dest.push({
-        StartTime: indexesOne,
-        data: [item]
-      })
-      map[indexesOne] = item
-    } else {
-      for (let j = 0; j < dest.length; j++) {
-        const dj = dest[j]
-        const indexesTwo = item.addTime.substr(0, 4)
-        if (dj.StartTime === indexesTwo) {
-          dj.data.push(item)
-          break
-        }
-      }
-    }
-  }
-  function getMonth(data) {
+  function tree(data, type) {
     const map = {}
     const dest = []
     for (let i = 0; i < data.length; i++) {
       const item = data[i]
-      const indexesOne = item.addTime.substr(5, 2)
-      if (!map[indexesOne]) {
+      const indexOne = type == 'year' ? item.addTime.substr(0, 4) : item.addTime.substr(5, 2) // 获取月
+      if (!map[indexOne]) {
         dest.push({
-          StartTime: indexesOne,
+          StartTime: indexOne,
           data: [item]
         })
-        map[indexesOne] = item
+        map[indexOne] = item
       } else {
         for (let j = 0; j < dest.length; j++) {
-          const dj = dest[j]
-          const indexesTwo = item.addTime.substr(5, 2)
-          if (dj.StartTime === indexesTwo) {
-            dj.data.push(item)
+          const children = dest[j]
+          const indexTwo = type == 'year' ? item.addTime.substr(0, 4) : item.addTime.substr(5, 2)
+          if (children.StartTime === indexTwo) {
+            children.data.push(item)
             break
           }
         }
@@ -52,13 +30,101 @@ function formatArticle(source) {
     }
     return dest
   }
-  dest.forEach(element => {
-    element.data = getMonth(element.data)
-  })
 
+  let dest = tree(source, 'year')
+  dest.forEach(ele => {
+    ele.data = tree(ele.data, 'month')
+  })
   return dest
 }
 
+function formatArticle2(source) {
+  // source = source.map(element => {
+  //   return {
+  //     yearTime: element.addTime.substr(0, 4),
+  //     monthTime: element.addTime.substr(5, 2),
+  //     value: element
+  //   }
+  // })
+  // console.log(source)
+
+  // let map = {}
+  // function tree(parent) {
+  //   console.log('parent', parent)
+  //   let arr = []
+  //   let sources = []
+
+  //   if (parent) {
+  //     if (parent.length == 4) {
+  //       sources = source.filter(item => {
+  //         return item.yearTime === parent
+  //       })
+  //     } else if (parent.length == 2) {
+  //       sources = source.filter(item => {
+  //         return item.monthTime === parent
+  //       })
+  //     }
+  //   } else {
+  //     sources = source
+  //   }
+
+  //   for (let i = 0; i < sources.length; i++) {
+  //     const ele = sources[i]
+  //     console.log(ele)
+  //     // console.log(parent.length)
+
+  //     // if (!map[ele.yearTime]) {
+  //     arr.push({
+  //       yearTime: ele.yearTime,
+  //       monthTime: ele.monthTime,
+  //       children: tree(ele.yearTime)
+  //       // children: tree(parent.length == 4 ? ele.yearTime : ele.monthTime)
+  //     })
+  //     // }
+  //     console.log('进来了么', arr)
+  //   }
+  //   return arr
+  // }
+  // return tree()
+
+  function tree(data, type) {
+    const map = {}
+    const dest = []
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i]
+      const indexOne = type == 'year' ? item.addTime.substr(0, 4) : item.addTime.substr(5, 2) // 获取月
+      if (!map[indexOne]) {
+        dest.push({
+          StartTime: indexOne,
+          data: [item]
+        })
+        map[indexOne] = item
+      } else {
+        for (let j = 0; j < dest.length; j++) {
+          const children = dest[j]
+          const indexTwo = type == 'year' ? item.addTime.substr(0, 4) : item.addTime.substr(5, 2)
+          if (children.StartTime === indexTwo) {
+            children.data.push(item)
+            break
+          }
+        }
+      }
+    }
+    return dest
+  }
+
+  let dest = tree(source, 'year')
+  dest.forEach(ele => {
+    ele.data = tree(ele.data, 'month')
+  })
+  return dest
+}
+
+/**
+ * 更具数据处理数据标签
+ *
+ * @param source 数据源
+ */
 function formatArticleTag(source: Array<any>): Array<any> {
   let tagArticle = []
   let dict = []
@@ -87,6 +153,12 @@ function formatArticleTag(source: Array<any>): Array<any> {
   return tagArticle || []
 }
 
+/**
+ * 获取具体文章数据
+ *
+ * @param source 数据源
+ * @param id 文章id
+ */
 // getAppointDetail 获取具体文章
 function getAppointDetail(source: Array<any> = [], id: String) {
   for (const iterator of source) {
@@ -109,7 +181,7 @@ export default {
   getArticleAll(
     data: object = {
       issueStatus: 1
-    },
+    }
   ) {
     const config = {
       method: 'get',
@@ -122,12 +194,14 @@ export default {
         io(config)
           .then(res => {
             articleAll = res.data
+            console.log(formatArticle2(articleAll))
             return resolve(formatArticle(articleAll))
           })
           .catch(e => {
             reject(e)
           })
       } else {
+        console.log(formatArticle2(articleAll))
         return resolve(formatArticle(articleAll))
       }
     })

@@ -1,8 +1,8 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text, RichText } from '@tarojs/components'
+import { View, RichText, WebView } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
-import ParserRichText from './../../components/ParserRichText/parserRichText'
+import { TaroRichTextNoWxParse } from 'taro_rich_text'
 
 import './index.scss'
 
@@ -65,6 +65,7 @@ class Index extends Component {
     let { dataSource } = this.state
     return (
       <View className="blog-detail">
+        {/* <WebView src="https://ruraltech.cn/blog/2020-01-05/Mocha%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95" /> */}
         <View className="at-article">
           <View className="at-article__h1">{dataSource.title}</View>
           <View className="at-article__info">
@@ -82,17 +83,7 @@ class Index extends Component {
           </View>
           <View className="at-article__content">
             <RichText nodes={dataSource.contentHtml} />
-            {/* <ParserRichText html={dataSource.contentHtml}></ParserRichText> */}
-            {/* <View className="at-article__section">
-              <View className="at-article__h2">这是二级标题</View>
-              <View className="at-article__h3">这是三级标题</View>
-              <View className="at-article__p">
-                这是文本段落。这是文本段落。这是文本段落。这是文本段落。这是文本段落。这是文本段落。这是文本段落。这是文本落。这是文本段落。1234567890123456789012345678901234567890
-                ABCDEFGHIJKLMNOPQRSTUVWXYZ
-              </View>
-              <View className="at-article__p">这是文本段落。这是文本段落。</View>
-              <Image className="at-article__img" src="https://jdc.jd.com/img/400x400" mode="widthFix" />
-            </View> */}
+            <TaroRichTextNoWxParse raw={false} type="markdown" richText={dataSource.content} />
           </View>
         </View>
       </View>

@@ -72,8 +72,6 @@ export const baseOptions = async (params, method) => {
       header: { 'content-type': contentType, Token: token }
     }
     // .abort() // 取消请求任务
-    console.log(isShowLoading)
-    
     isShowLoading &&
       Taro.showLoading({
         title: option.loadingText,

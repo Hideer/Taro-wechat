@@ -35,9 +35,7 @@ const config = {
     ]
   },
   copy: {
-    patterns: [
-      { from: 'src/components/ParserRichText/Parser/', to: 'dist/components/ParserRichText/Parser/' }
-    ],
+    patterns: [{ from: 'src/components/ParserRichText/Parser/', to: 'dist/components/ParserRichText/Parser/' }],
     options: {}
   },
   defineConstants: {},
@@ -69,7 +67,7 @@ const config = {
     }
   },
   h5: {
-    esnextModules: ['taro-ui'],
+    esnextModules: ['taro-ui', 'taro_rich_text'],
     publicPath: '/',
     staticDirectory: 'static',
     postcss: {
